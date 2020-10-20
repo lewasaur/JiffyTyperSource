@@ -1,0 +1,264 @@
+<p>Timer will start once you typed the first letter. Click RELOAD to get a different text.</p>
+<h3 id="timer">-</h3>
+<div>
+   <h5 id="typeContent" class="text-justify">  <%= randomPost.text.trim() %> </h5>
+</div>
+
+<textarea rows="12" cols="120" id="inputElement" class="h5 text-justify" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" spellcheck="false" onDrag="return false" onDrop="return false" autocomplete=off></textarea>
+
+<div class="modal fade" id="highModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New High Score!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/play" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="col-form-label">Enter Your name</label>
+              <input type="text" name="firstname" class="form-control" id="newHighName">
+              <label class="col-form-label">Your time is:</label>
+              <input type="text" name="firstscore" class="form-control" id="newHighScore" readonly>
+              <label class="col-form-label">text ID:</label>
+              <input type="text" name="id" class="form-control" id="currentId" readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+            
+          <button type="submit" class="btn btn-primary">Submit and Play Again</button>
+        </div>
+        </form>
+       
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="modal" id="regModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Finished!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>It took you <span id="showLoseScore" class="text-info"></span> seconds to finish this text.</p>
+          <p>The fastest person to finish this was <span id="showDom" class="text-info"></span>.</p>
+          <p>it took them <span id="showDomScore" class="text-info"></span> seconds to type everything.</p>
+        </div>
+        <div class="modal-footer">
+          <button onclick="location.reload()" type="button" class="btn btn-primary">Play Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<h6 class=container>
+      <div class="float-left">
+        <div>
+          The title of this Post is: <p class="font-italic font-weight-normal"> <%= randomPost.title %></p>
+        </div>
+        
+        <div>
+          Description: <p class="font-italic font-weight-normal"><%= randomPost.description %></p>
+        </div>
+        
+   
+        
+    
+
+      </div>
+        
+        <div class="float-right">
+          <div>
+          Contributed by: <p class="font-italic font-weight-normal"><%= randomPost.contributor %></p>
+          </div> 
+        
+        </div>
+      
+</h6>
+
+
+
+  
+
+
+
+
+
+
+<div class="container">
+  <table class="table table-bordered text-center">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Fastest Typer for this Text</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="winner"><%= randomPost.firstname %></td>
+        <td><span id="firstScore"><%= randomPost.firstscore %></span></td>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div>
+        <a href="/" class="btn btn-secondary">BACK</a>
+      </div>
+    </div>
+    <div class="col float-right">
+    </div>
+    <div class="col float-right">
+      <a href="/play" class="btn btn-primary float-right"><span>RELOAD</span></a>
+    </div>
+  </div>
+</div>
+
+
+<h6 class="container fixed-bottom">
+  id: <span id="idHolder"><%= randomPost.id %></span>
+</h6>
+
+<script>
+
+
+const textType = document.getElementById("textType");
+const typeContent = document.getElementById("typeContent");
+const inputElement =document.getElementById("inputElement")
+const timer = document.getElementById("timer")
+const firstScore = document.getElementById("firstScore")
+
+let startTime;
+let timeInterval;
+let score;
+
+function startTimer(){
+    
+    
+    timer.innerText = 0
+    startTime = new Date()
+ timeInterval =  setInterval(() => {
+        timer.innerText = getTime()
+
+        }, 1000)
+}
+
+
+
+function getTime(){
+  return Math.floor((new Date() - startTime)/1000)
+}
+
+function doneType(){
+    document.getElementById('inputElement').disabled = true; 
+    clearInterval(timeInterval)
+    score = Number(timer.innerText)
+    compareScore()
+}
+
+
+
+const toType = typeContent.textContent.trim();
+typeContent.innerHTML = ''
+toType.split('').forEach(character => {
+    const toTypeSpan = document.createElement('span');
+    toTypeSpan.innerText = character;
+    typeContent.appendChild(toTypeSpan);
+})
+
+let startVarX = false;
+let startVarY = false;
+
+inputElement.addEventListener('input', () => {
+   const typeArray = typeContent.querySelectorAll('span')
+   const arrayValue = inputElement.value.split('')
+   let correct = true
+   if(startVarX == false && startVarY == false){
+       startTimer()
+       startVarX = true
+   }
+   typeArray.forEach((toTypeSpan, index) => {
+       const character = arrayValue[index]
+       
+       if (character == null) {
+            toTypeSpan.classList.remove('text-success')
+            toTypeSpan.classList.remove('text-danger')
+            correct = false
+       }
+        else if (character === toTypeSpan.innerText) {
+           toTypeSpan.classList.add('text-success')
+           toTypeSpan.classList.remove('text-danger')
+
+       } else {
+           toTypeSpan.classList.add('text-danger')
+           toTypeSpan.classList.remove('text-success')
+           correct = false
+       }
+      
+   })
+   if(correct){
+        doneType();
+   }
+
+})
+
+
+
+
+//score values
+const userScore = Number(score);
+let firstHigh = Number(firstScore.textContent);
+let newHighScore;
+let newHighName;
+
+
+const modalTest = document.getElementById("modalTest")
+
+
+function openHighModal(){
+    $('#highModal').modal('show')
+}
+
+function openRegModal(){
+  $('#regModal').modal('show')
+}
+
+const newScoreSave = document.getElementById("newHighScore")
+const idHolder = document.getElementById("idHolder")
+const idGetter = document.getElementById("currentId")
+const showDom = document.getElementById("showDom")
+const winner = document.getElementById("winner")
+const showDomScore = document.getElementById("showDomScore")
+
+function compareScore(){
+    if(score < firstHigh){
+        //hihg score
+        newScoreSave.value = score;
+        idGetter.value = idHolder.innerText
+        openHighModal();
+    } else {
+        //not high score
+        openRegModal()
+        document.getElementById("showLoseScore").textContent = score
+        showDom.innerHTML = winner.textContent
+        showDomScore.innerHTML = firstScore.textContent
+    }
+}
+
+</script>

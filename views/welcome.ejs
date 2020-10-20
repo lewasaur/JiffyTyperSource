@@ -1,0 +1,57 @@
+<div class="container">
+  <div>
+    <div class="card card-body">
+      <h3 class="font-weight-bold">Welcome to JiffyTyper!</h3>
+      <hr>
+      <h4 class="font-weight-normal">This is a small game I made where you have to type a text with the shortest time possible.</h4>
+      <hr>
+      <h4 class="font-weight-normal">You can also submit a text to the database for the game to use.</h4>
+      <h4 class="font-weight-normal">(Other visitors can also play your text!)</h4>
+      <div class="row">
+        <div class="col-sm"><button data-toggle="modal" data-target="#infoModal" class="btn btn-info btn-lg">MORE INFO</button></div>
+        <div class="col-sm"><a href="/submit" class="btn btn-secondary btn-block btn-lg">SUBMIT A TEXT</a></div>
+        <div class="col-sm"><a href="/play" class="btn btn-primary btn-block mb-2 btn-lg">PLAY</a></div>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">About</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>What is this?</h5>
+  <p>Hello! My name is Arni and I made this website/game about typing texts sent by users.</p>
+  <hr>
+  <h5>Why?</h5>
+  <p>I was watching a NodeJs, ExpressJs, and MongoDB tutorial. I learned that you can create your own Database/REST API with these libraries, so I made one, made it work, then I thought, "What can I do with this database?" so I made a typing game where you use the texts in the Database.</p>
+  <hr>
+  <h5>How was this made?</h5>
+  <p>As mentioned above, I first created a REST API with mongoDB that can store and send documents. Then I made a User Interface where the users can submit their own texts. Then I coded the typing game after I made sure the Playing-Page gets a random document from the database everytime you reload it. I also used EJS to make the UI and bootstrap to style it.</p>
+  <hr>
+  <h5>What should I submit as a text?</h5>
+  <p>Anything as long as your text is in Roman Alphabet. (Do not submit any text that is not directly accessible with the normal keyboard, please be mindful to other players). As for content for your text, you can submit anything! whether it's a song lyric, movie quote, your poem, something you want to vent about, etc.</p>
+  <hr>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
